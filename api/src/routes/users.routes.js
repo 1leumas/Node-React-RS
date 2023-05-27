@@ -1,8 +1,8 @@
 const { Router } = require("express");
 
-const userRoutes = Router();
+const usersRoutes = Router();
 
-userRoutes.post("/", (request, response) => {
+usersRoutes.post("/", (request, response) => {
     const {name, email, password} = request.body
 
     response.json({name, email, password});
