@@ -7,5 +7,11 @@ app.get("/message/:id/:user", (request, response) => {
     response.send(`message id: ${id} to user: ${user}`);
 })
 
+app.get("/users", (request, response) => {
+    const {page, limit} = request.query;
+
+    response.send(`page: ${page}. limit: ${limit}`);
+})
+
 const port = 3333;
 app.listen(port, () => console.log(`server is running at port ${port}`));
