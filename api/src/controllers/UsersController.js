@@ -1,3 +1,5 @@
+const AppError = require("../utils/AppError");
+
 class UsersControllers {
     /**
      * index - GET to list various registers;
@@ -8,7 +10,11 @@ class UsersControllers {
      */
 
     create(request, response) {
-        const { name, email, password } = request.body
+        const { name, email, password } = request.body;
+        if(!name){
+            throw new AppError("please enter a name");
+        }
+        
         response.status(201).json({ name, email, password });
     }
 
