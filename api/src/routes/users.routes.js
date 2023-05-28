@@ -18,6 +18,6 @@ function myMiddleware(request, response, next){
 const UsersController = new UsersControllers();
 
 usersRoutes.use(myMiddleware);
-usersRoutes.post("/", UsersControllers.create);
+usersRoutes.post("/", UsersControllers.create());
 
 module.exports = usersRoutes;
