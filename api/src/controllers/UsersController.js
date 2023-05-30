@@ -1,5 +1,5 @@
 const { hash, compare } = require("bcryptjs");
-const AppError = require("../utils/AppError");
+//const AppError = require("../utils/AppError");
 const sqliteConnection = require('../database/sqlite');
 
 class UsersControllers {
@@ -51,16 +51,18 @@ class UsersControllers {
             return response.status(400).json();
         }
 
-        user.name = name;
-        user.email = email;
+        user.name = name ?? user.name;
+        user.email = email ?? user.email;
 
         if (password && !old_password) {
-            throw new AppError("you need to confirm the old password to define a new one");
+            response.statusMessage = "you need to confirm the old password to define a new one"
+            return response.status(400).json();
         }
         if (password && old_password) {
             const checkOldPassword = await compare(old_password, user.password);
             if (!checkOldPassword) {
-                throw new AppError("old password is invalid");
+                response.statusMessage = "Old password is invalid"
+                return response.status(400).json();
             }
 
             user.password = await hash(password, 8);
