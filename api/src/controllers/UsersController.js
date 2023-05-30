@@ -1,4 +1,4 @@
-//const { hash } = require("bcryptjs");
+const { hash,compare } = require("bcryptjs");
 const AppError = require("../utils/AppError");
 const sqliteConnection = require('../database/sqlite');
 
@@ -20,18 +20,18 @@ class UsersControllers {
         if (checkUserExist) {
             throw new AppError("this email is already in use.");
         }
-        //const hashedPassword = await hash(password, 8)
+        const hashedPassword = await hash(password, 8)
 
         await database.run(
             "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-            [name, email, password]
+            [name, email, hashedPassword]
         );
 
         return response.status(201).json();
     }
 
     async update(request, response) {
-        const { name, email } = request.body;
+        const { name, email, password, old_password } = request.body;
         const { id } = request.params;
 
         const database = await sqliteConnection();
@@ -50,12 +50,26 @@ class UsersControllers {
         user.name = name;
         user.email = email;
 
+        if(password && !old_password){
+            throw new AppError("you need to confirm the old password to define a new one");
+        }
+        if(password && old_password){
+            const checkOldPassword = await compare(old_password, user.password);
+            if(!checkOldPassword){
+                throw new AppError("old password is invalid");
+            }
+
+            user.password = await hash(password, 8);
+        }
+
+
         await database.run(`UPDATE users SET 
-        name = ? 
-        email = ? 
-        updated_at = ? 
+        name = ?,
+        email = ?,
+        password = ?,
+        updated_at = ?
         WHERE id = ?`,
-            [user.name, user.email, new Date(), id]);
+            [user.name, user.email, user.password,  new Date(), id]);
 
         return response.status(200).json()
     }
