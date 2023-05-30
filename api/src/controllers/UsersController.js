@@ -1,4 +1,4 @@
-const { hash,compare } = require("bcryptjs");
+const { hash, compare } = require("bcryptjs");
 const AppError = require("../utils/AppError");
 const sqliteConnection = require('../database/sqlite');
 
@@ -15,11 +15,13 @@ class UsersControllers {
         const { name, email, password } = request.body;
 
         const database = await sqliteConnection();
-        const checkUserExist = await database.get("SELECT * FROM users WHERE email = (?)", [email]);
+        const checkUserExist = await database.get("SELECT * FROM users WHERE email = ?", [email]);
 
-        if (checkUserExist) {
-            throw new AppError("this email is already in use.");
+        if (checkUserExist.id) {
+            response.statusMessage = "User already exists"
+            return response.status(400).json();
         }
+
         const hashedPassword = await hash(password, 8)
 
         await database.run(
@@ -35,27 +37,29 @@ class UsersControllers {
         const { id } = request.params;
 
         const database = await sqliteConnection();
-        const user = await database.get("SELECT * FROM users WHERE id = (?)", [id]);
+        const user = await database.get("SELECT * FROM users WHERE id = ?", [id]);
 
         if (!user) {
-            throw new AppError("User not found");
+            response.statusMessage = "User not found"
+            return response.status(400).json();
         }
 
-        const userWithUpdatedEmail = await database.get("SELECT * FROM users WHERE email = (?)", [email]);
+        const userWithUpdatedEmail = await database.get("SELECT * FROM users WHERE email = ?", [email]);
 
         if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
-            throw new AppError("this email is already in use.");
+            response.statusMessage = "this email is already in use."
+            return response.status(400).json();
         }
 
         user.name = name;
         user.email = email;
 
-        if(password && !old_password){
+        if (password && !old_password) {
             throw new AppError("you need to confirm the old password to define a new one");
         }
-        if(password && old_password){
+        if (password && old_password) {
             const checkOldPassword = await compare(old_password, user.password);
-            if(!checkOldPassword){
+            if (!checkOldPassword) {
                 throw new AppError("old password is invalid");
             }
 
@@ -67,9 +71,9 @@ class UsersControllers {
         name = ?,
         email = ?,
         password = ?,
-        updated_at = ?
+        updated_at = DATETIME('now')
         WHERE id = ?`,
-            [user.name, user.email, user.password,  new Date(), id]);
+            [user.name, user.email, user.password, id]);
 
         return response.status(200).json()
     }
