@@ -3,7 +3,7 @@ const createUsers = require('./createUsers');
 
 async function migrationsRun(){
     const schemas = [
-        createUsers
+        createUsers,
 
     ].join('');
 
