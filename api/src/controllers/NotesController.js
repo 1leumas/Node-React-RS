@@ -1,6 +1,6 @@
 const knex = require("../database/knex");
 
-class NotesController{
+class NotesController {
     async create(request, response) {
         const { title, description, tags, links } = request.body;
         const { user_id } = request.params;
@@ -34,7 +34,7 @@ class NotesController{
     }
 
     async show(request, response) {
-        const { id }= request.params;
+        const { id } = request.params;
 
         const note = await knex("notes").where({ id }).first();
 
@@ -42,22 +42,30 @@ class NotesController{
     }
 
     async delete(request, response) {
-        const {id} = request.params;
+        const { id } = request.params;
 
-        await knex("notes").where({id}).delete();
+        await knex("notes").where({ id }).delete();
 
         return response.json();
     }
 
     async index(request, response) {
-        const { title, user_id } = request.query;
+        const { title, user_id, tags } = request.query;
+        let notes;
 
-        const notes = await knex("notes")
-        .where({ user_id })
-        .whereLike("title", `%${title}%`)
-        .orderBy("title");
+        if (tags) {
+            const filterTags = tags.split(',').map(tag => tag.trim());
 
-        return response.json(notes);
+            notes = await knex("tags")
+                .whereIn("name", filterTags)
+        } else {
+            notes = await knex("notes")
+                .where({ user_id })
+                .whereLike("title", `%${title}%`)
+                .orderBy("title");
+
+            return response.json(notes);
+        }
     }
 }
 
