@@ -40,6 +40,14 @@ class NotesController{
 
         return response.json(note);
     }
+
+    async delete(request, response) {
+        const {id} = request.params;
+
+        await knex("notes").where({id}).delete();
+
+        return response.json();
+    }
 }
 
 module.exports = NotesController;
