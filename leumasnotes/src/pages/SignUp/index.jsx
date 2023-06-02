@@ -1,17 +1,27 @@
 import { Container, Form, Background } from './styles'
-import { FiMail, FiLock} from 'react-icons/fi'
+import { FiMail, FiLock, FiUser } from 'react-icons/fi'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 
 
-export function  SignIn() {
+export function SignUp() {
     return (
+
         <Container>
+            <Background />
+            
             <Form>
                 <h1>Leumas Notes</h1>
                 <p>App to save and manage your Links and Notes</p>
 
-                <h2>Login</h2>
+                <h2>Create an Account</h2>
+
+                <Input
+                    placeholder="Name"
+                    type="text"
+                    icon={FiUser}
+                />
+
                 <Input
                     placeholder="E-mail"
                     type="text"
@@ -24,16 +34,13 @@ export function  SignIn() {
                     icon={FiLock}
                 />
 
-                <Button title="Login"/>
+                <Button title="Sign Up" />
 
                 <a href="#">
-                    Create an Account
+                    Back to Login
                 </a>
 
             </Form>
-
-            <Background/>
-
         </Container>
     );
 }
