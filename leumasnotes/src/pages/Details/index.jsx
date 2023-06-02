@@ -5,11 +5,11 @@ import { Header } from "../../components/Header"
 import { ButtonText } from "../../components/ButtonText"
 import { Section } from "../../components/Section"
 import { Tag } from "../../components/Tag"
+import { Link } from 'react-router-dom';
 
 
 
 export function Details() {
-
     return (
         <Container>
             <Header />
@@ -54,7 +54,9 @@ export function Details() {
                     </Section>
 
 
-                    <Button title="Go Back" />
+                    <Link to="/">
+                        <Button title="Go Back"/>
+                    </Link>
                 </Content>
             </main>
         </Container>
