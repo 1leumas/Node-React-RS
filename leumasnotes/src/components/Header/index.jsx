@@ -8,11 +8,11 @@ export function Header() {
             <Profile>
                 <img
                     src="https://github.com/1leumas.png"
-                    alt="foto do usuario"
+                    alt="user photo"
                 />
 
                 <div>
-                    <span>Bem-vindo</span>
+                    <span>Welcome,</span>
                     <strong>Samuel Machado</strong>
                 </div>
 
