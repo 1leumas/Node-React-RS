@@ -1,8 +1,20 @@
-import { Container } from './styles';
+import { Container, Profile } from './styles';
 
 export function Header() {
-    return(
+    return (
         <Container>
+            <Profile>
+                <img
+                    src="https://github.com/1leumas.png"
+                    alt="foto do usuario"
+                />
+
+                <div>
+                    <span>Bem-vindo</span>
+                    <strong>Samuel Machado</strong>
+                </div>
+
+            </Profile>
 
         </Container>
     );
