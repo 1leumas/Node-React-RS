@@ -14,7 +14,8 @@ function AuthProvider({ children }) {
             localStorage.setItem("@leumasnotes:user", JSON.stringify(user));
             localStorage.setItem("@leumasnotes:token", token);
 
-            api.defaults.headers.authorization = `Bearer ${token}`
+            instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
             setData({ user, token });
         } catch (error) {
             if (error.response) {
@@ -37,7 +38,7 @@ function AuthProvider({ children }) {
         const token = localStorage.getItem("@leumasnotes:token");
 
         if (token && user) {
-            api.defaults.headers.authorization = `Bearer ${token}`
+            instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             setData({
                 token,
