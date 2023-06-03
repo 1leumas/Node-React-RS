@@ -8,12 +8,23 @@ import { useAuth } from '../../hooks/auth'
 
 
 export function Profile() {
-    const { user } = useAuth();
+    const { user, updateProfile } = useAuth();
 
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [password, setPassword] = useState();
     const [newPassword, setNewPassword] = useState();
+
+    async function handleUpdate(){
+        const user ={
+            name,
+            email,
+            password: newPassword,
+            old_password: password
+        }
+
+        await updateProfile({user})
+    }
 
     return (
         <Container>
@@ -69,7 +80,9 @@ export function Profile() {
                     onChange = {e => setNewPassword(e.target.value)}
                 />
 
-                <Button title="Save" />
+                <Button 
+                title="Save"
+                onClick={handleUpdate} />
             </Form>
 
         </Container>

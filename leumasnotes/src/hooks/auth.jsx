@@ -15,7 +15,7 @@ function AuthProvider({ children }) {
             localStorage.setItem("@leumasnotes:token", token);
 
             api.defaults.headers.authorization = `Bearer ${token}`
-            
+
             setData({ user, token });
         } catch (error) {
             if (error.response) {
@@ -31,6 +31,23 @@ function AuthProvider({ children }) {
         localStorage.removeItem("@leumasnotes:token");
 
         setData({});
+    }
+
+    async function updateProfile({ user }) {
+        try {
+            await api.put("/users", user);
+            localStorage.setItem("@leumasnotes:user", JSON.stringify(user));
+            
+            setData({user, token: data.token});
+            alert("profile updated")
+
+        } catch (error) {
+            if (error.response) {
+                alert(error.response.data);
+            } else {
+                alert("couldnt update profile");
+            }
+        }
     }
 
     useEffect(() => { //ficar salvo no localstorage
@@ -52,7 +69,8 @@ function AuthProvider({ children }) {
         <AuthContext.Provider value={{
             signIn,
             signOut,
-            user: data.user
+            user: data.user,
+            updateProfile
         }}>
             {children}
         </AuthContext.Provider>
