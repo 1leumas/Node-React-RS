@@ -5,6 +5,8 @@ import { Button } from '../../components/Button'
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../../hooks/auth'
+import defaultAvatar from '../../assets/avatar_placeholder.svg'
+import {api} from '../../services/api'
 
 export function Profile() {
     const { user, updateProfile } = useAuth();
@@ -14,7 +16,8 @@ export function Profile() {
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
 
-    const [avatar, setAvatar] = useState(user.avatar);
+    const avatarUrl = user.avatar ? `${api.defaults.baseURL}/files/${user.avatar}` : defaultAvatar;
+    const [avatar, setAvatar] = useState(avatarUrl);
     const [avatarFile, setAvatarFile] = useState(null);
 
     async function handleUpdate() {
