@@ -4,7 +4,7 @@ const authConfig = require("../configs/auth");
 function ensureAuth(require, response, next){
     const authHeader = request.headers.authorization;
     if(!authHeader){
-        return response.status(401).json("Invalid JWT Token");
+        response.status(401).json("Invalid JWT Token");
     }
 
     const [, token] = authHeader.split(" ");
@@ -18,7 +18,7 @@ function ensureAuth(require, response, next){
 
         return next();
     }catch{
-        return response.status(401).json("Invalid JWT Token");
+        response.status(401).json("Invalid JWT Token");
     }
 }
 
