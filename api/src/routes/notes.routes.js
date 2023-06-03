@@ -1,10 +1,13 @@
 const { Router } = require("express");
 
 const NotesController = require("../controllers/NotesController");
+const ensureAuth = require('../middleware/ensureAuth');
 
 const notesRoutes = Router();
 
 const notesController = new NotesController();
+
+notesRoutes.use(ensureAuth);
 
 notesRoutes.post("/:user_id", notesController.create);
 notesRoutes.get("/:id", notesController.show);

@@ -5,7 +5,7 @@ function ensureAuth(request, response, next) {
     console.log('ensureAuth middleware called');
     const authHeader = request.headers.authorization;
     if (!authHeader) {
-      return response.status(401).json('Invalid JWT Token');
+      return response.status(401).json('JWT Token not Informed');
     }
   
     const [, token] = authHeader.split(' ');
