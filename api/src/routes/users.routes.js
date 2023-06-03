@@ -1,13 +1,11 @@
-const { Router } = require("express");
+const { Router } = require('express');
+const UsersController = require('../controllers/UsersController');
+const ensureAuth = require('../middleware/ensureAuth');
 
-const UsersControllers = require("../controllers/UsersController");
-const ensureAuth = require("../middleware/ensureAuth");
+const usersRouter = Router();
+const usersController = new UsersController();
 
-const usersRoutes = Router();
+usersRouter.post('/', usersController.create);
+usersRouter.put('/:id', ensureAuth, usersController.update); // <-- Use the ensureAuth middleware here
 
-const usersController = new UsersControllers();
-
-usersRoutes.post("/", usersController.create);
-usersRoutes.put("/:id", ensureAuth, usersController.update);
-
-module.exports = usersRoutes;
+module.exports = usersRouter;
