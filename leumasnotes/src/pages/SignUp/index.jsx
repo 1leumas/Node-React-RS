@@ -15,21 +15,23 @@ export function SignUp() {
 
     function handleSignUp() {
         if (!name || !email || !password) {
-            return alert("please fill all the fields");
+            return (
+                alert("please fill all the fields")
+            );
         }
 
         api.post("/users", { name, email, password })
-        .then( () => {
-        alert("user registered");
-        navigate("/");
-        })
-        .catch(error => {
-            if(error.response){
-                alert(error.response.data);
-            }else{
-                alert("wasnt possible to register")
-            }
-        })
+            .then(() => {
+                alert("user registered");
+                navigate("/");
+            })
+            .catch(error => {
+                if (error.response) {
+                    alert(error.response.data);
+                } else {
+                    alert("wasnt possible to register")
+                }
+            })
     }
 
     return (
