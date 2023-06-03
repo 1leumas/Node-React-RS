@@ -18,8 +18,7 @@ class UsersControllers {
         const checkUserExist = await database.get("SELECT * FROM users WHERE email = ?", [email]);
 
         if (checkUserExist) {
-            response.statusMessage = "User already exists"
-            return response.status(400).json();
+            return response.status(400).json("User already exists");
         }
 
         const hashedPassword = await hash(password, 8)
@@ -40,29 +39,25 @@ class UsersControllers {
         const user = await database.get("SELECT * FROM users WHERE id = ?", [id]);
 
         if (!user) {
-            response.statusMessage = "User not found"
-            return response.status(400).json();
+            return response.status(400).json("User not found");
         }
 
         const userWithUpdatedEmail = await database.get("SELECT * FROM users WHERE email = ?", [email]);
 
         if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
-            response.statusMessage = "this email is already in use."
-            return response.status(400).json();
+            return response.status(400).json("this email is already in use.");
         }
 
         user.name = name ?? user.name;
         user.email = email ?? user.email;
 
         if (password && !old_password) {
-            response.statusMessage = "you need to confirm the old password to define a new one"
-            return response.status(400).json();
+            return response.status(400).json("you need to confirm the old password to define a new one");
         }
         if (password && old_password) {
             const checkOldPassword = await compare(old_password, user.password);
             if (!checkOldPassword) {
-                response.statusMessage = "Old password is invalid"
-                return response.status(400).json();
+                return response.status(400).json("Old password is invalid");
             }
 
             user.password = await hash(password, 8);
