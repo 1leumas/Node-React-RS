@@ -3,13 +3,9 @@ import { Container, Profile, Logout } from './styles';
 import { useAuth } from '../../hooks/auth';
 import {api} from '../../services/api';
 
-
-
 export function Header() {
     const { signOut, user } = useAuth();
-
     const avatarUrl = user.avatar ? `${api.defaults.baseURL}/files/${user.avatar}` : defaultAvatar;
-
     
     return (
         <Container>
