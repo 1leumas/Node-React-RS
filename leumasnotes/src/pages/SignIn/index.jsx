@@ -3,9 +3,14 @@ import { FiMail, FiLock} from 'react-icons/fi'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { Link } from 'react-router-dom';
+import { api } from '../../services/api';
+import { useAuth } from '../../hooks/auth';
 
 
 export function  SignIn() {
+
+    const data = useAuth();
+    console.log("context : ", data)
     return (
         <Container>
             <Form>
