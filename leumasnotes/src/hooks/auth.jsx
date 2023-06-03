@@ -6,16 +6,16 @@ const AuthContext = createContext({});
 function AuthProvider({ children }) {
     const [data, setData] = useState({});
 
-    async function signIn({ email, password }) {
+    async function signIn({ email, password }) { //entrar no aplicativo, validar token
         try {
             const response = await api.post("/sessions", { email, password });
-            const {user,token} = response.data;
+            const { user, token } = response.data;
 
             localStorage.setItem("@leumasnotes:user", JSON.stringify(user));
             localStorage.setItem("@leumasnotes:token", token);
 
             api.defaults.headers.authorization = `Bearer ${token}`
-            setData({user, token});
+            setData({ user, token });
         } catch (error) {
             if (error.response) {
                 alert(error.response.data);
@@ -25,11 +25,18 @@ function AuthProvider({ children }) {
         }
     }
 
-    useEffect( ()=> {
+    function signOut() {
+        localStorage.removeItem("@leumasnotes:user");
+        localStorage.removeItem("@leumasnotes:token");
+
+        setData({});
+    }
+
+    useEffect(() => { //ficar salvo no localstorage
         const user = localStorage.getItem("@leumasnotes:user");
         const token = localStorage.getItem("@leumasnotes:token");
 
-        if(token && user) {
+        if (token && user) {
             api.defaults.headers.authorization = `Bearer ${token}`
 
             setData({
@@ -41,7 +48,11 @@ function AuthProvider({ children }) {
     }, [])
 
     return (
-        <AuthContext.Provider value={{ signIn, user: data.user }}>
+        <AuthContext.Provider value={{
+            signIn,
+            signOut,
+            user: data.user
+        }}>
             {children}
         </AuthContext.Provider>
     );
