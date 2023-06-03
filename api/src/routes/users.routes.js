@@ -6,6 +6,6 @@ const usersRouter = Router();
 const usersController = new UsersController();
 
 usersRouter.post('/', usersController.create);
-usersRouter.put('/:id', ensureAuth, usersController.update); // <-- Use the ensureAuth middleware here
+usersRouter.put('/',ensureAuth, usersController.update);
 
 module.exports = usersRouter;
