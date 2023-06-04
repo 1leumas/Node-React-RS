@@ -1,7 +1,7 @@
 import { Container, Form } from './styles'
 import { Header } from '../../components/Header'
 import { Input } from '../../components/Input'
-import { Textarea } from '../../components/Textarea'
+import { Textarea } from "../../components/Textarea";
 import { NoteItem } from '../../components/NoteItem'
 import { Section } from '../../components/Section'
 import { Button } from '../../components/Button'
@@ -45,6 +45,11 @@ export function New() {
   }
 
   async function handleNewNote() {
+
+    if (!title || !description || tags.length === 0 || links.length === 0) {
+      return alert("Please fill all the fields.");
+    }
+
     await api.post("/notes", {
       title,
       description,
@@ -71,9 +76,8 @@ export function New() {
             onChange={e => setTitle(e.target.value)}
           />
           <Textarea
-            placeholder="Description"
-            value={description}
-            onChange={e => setDescription(e.target?.value)}
+          placeholder="Description"
+          onChange={e => setDescription(e.target.value)}
           />
           <Section title="Useful Links">
             {links.map((link, index) => (
